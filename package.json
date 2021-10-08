@@ -3,10 +3,13 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "express-validator": "^6.12.2",
-    "mongoose": "^6.0.9"
+    "joi": "^17.4.2",
+    "mongoose": "^6.0.9",
+    "nodemon": "^2.0.13"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "morgan": "^1.10.0"
   },
   "scripts": {
     "start": "node server.js"
@@ -15,15 +18,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "keywords": [],
-  "author": "Jackson Achemu",
+  "author": "",
   "license": "ISC",
-  "description": "A King's Land University Class 5 project",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Afcammedia/Module-5-project.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Afcammedia/Module-5-project/issues"
-  },
-  "homepage": "https://github.com/Afcammedia/Module-5-project#readme"
+  "description": ""
 }
