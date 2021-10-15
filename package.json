@@ -2,6 +2,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
     "express-validator": "^6.12.2",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
@@ -12,13 +13,22 @@
     "morgan": "^1.10.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "nodemon": "nodemon"
   },
   "name": "video-tutorial",
   "version": "1.0.0",
   "main": "server.js",
   "keywords": [],
-  "author": "",
+  "author": "Mr Jackson Achemu",
   "license": "ISC",
-  "description": ""
+  "description": "This is a Video Tutorial sharing application",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Afcammedia/Module-5-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Afcammedia/Module-5-project/issues"
+  },
+  "homepage": "https://github.com/Afcammedia/Module-5-project#readme"
 }

@@ -16,7 +16,9 @@ class AuthService {
         const user = { username, password, repeatPassword };
         const { error } = signupValidation(user);
         try {
-            const userExists = await this.Users.findOne({ username: username });
+            const userExists = await this.Users.findOne({
+                username: username,
+            });
             if (userExists) {
                 next(new AppError('Username unavailable, pick another.', 401));
             }
@@ -51,7 +53,7 @@ class AuthService {
         try {
             const user = await this.Users.findOne({
                 username: body.username,
-            });
+            }).lean();
             if (!user) {
                 result.message = 'No such User';
                 result.statusCode = 400;
@@ -80,6 +82,14 @@ class AuthService {
         } catch (err) {
             // next(new AppError(err.message, 400));
         }
+    }
+
+    async findUser(id) {
+        const user = await this.Users.findOne({
+            id: id,
+        }).lean();
+        if (!user) return 'User not found!';
+        return user;
     }
 }
 

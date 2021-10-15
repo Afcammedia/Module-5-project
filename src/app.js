@@ -3,13 +3,68 @@ const app = express();
 const dataBaseConnection = require('./db/db.mongoDB');
 const router = require('./routes/router');
 const morgan = require('morgan');
+const hbs = require('express-handlebars');
+const path = require('path');
 // Mongoose Connection
 dataBaseConnection();
 
 // BodyPerser
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 morgan('dev');
+
+// Views
+
+app.set('views', path.join(__dirname, 'views/partials'));
+app.set('view engine', 'hbs');
+app.engine(
+    'hbs',
+    hbs({
+        extname: 'hbs',
+        defaultLayout: 'layout.hbs',
+        layoutsDir: __dirname + '/views/layouts',
+        helpers: {
+            loadUrl: function (aString, bString) {
+                return `/course-details?userId=${aString}&course=${bString}`;
+            },
+            homePage: function (aString) {
+                return `/course/${aString}`;
+            },
+            sharecourse: function (sString) {
+                let result = '/create-course/' + sString;
+                return result;
+            },
+            courseSrc: function (sString) {
+                return `/courses-page/` + sString;
+            },
+            logOutSrc: function (sString) {
+                return `/logout/` + sString;
+            },
+            editcourse: function (id) {
+                return `/course/${id}`;
+            },
+            deleteCourse: function (id) {
+                return `deleteCourse('${id}')`;
+            },
+            likecourse: function (id) {
+                return `likecourse('${id}')`;
+            },
+            updateCourse: function (aString, bString) {
+                return `/update-course/${aString}/${bString}`;
+            },
+            enrollCourse: function (userId, courseId) {
+                const mString = userId + ' , ' + '"' + courseId;
+                return `enrollCourse("${mString}")`;
+            },
+            ingredients: function (aString) {
+                return aString.reduce((word, index) => {
+                    word + ` ${index}`;
+                }, '');
+            },
+        },
+    })
+);
 
 /*
 User route = '/api/v1/users'
