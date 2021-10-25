@@ -5,6 +5,7 @@ const {
     loginValidation,
 } = require('../utils/Joi.validators.utils');
 const bcrypt = require('bcryptjs');
+const { signToken } = require('../utils/token.utils');
 
 class AuthService {
     constructor() {
@@ -14,6 +15,8 @@ class AuthService {
     async signUp(body, next) {
         const result = {};
         const { username, password, repeatPassword } = body;
+        const hash = await bcrypt.hash(password, 10);
+
         const user = { username, password, repeatPassword };
         const { error } = signupValidation(user);
         try {
@@ -41,7 +44,8 @@ class AuthService {
                 result.status = 'Failed';
                 return result;
             }
-
+            user.password = hash;
+            user.repeatPassword = undefined;
             const newUser = await this.Users.create({ ...user });
             await newUser.save();
             newUser.password = undefined;
@@ -68,17 +72,18 @@ class AuthService {
                 result.status = 'Failed';
                 return result;
             }
-            // TODO: fix bycrypt for user password confirmation
             const invalidPassword = await bcrypt.compare(
                 password,
                 user.password
             );
-            // if (!invalidPassword) {
-            //     result.message = 'Username or Password wrong!';
-            //     result.statusCode = 200;
-            //     result.status = 'Failed';
-            //     return result;
-            // }
+            if (!invalidPassword) {
+                result.message = 'Username or Password wrong!';
+                result.statusCode = 200;
+                result.status = 'Failed';
+                return result;
+            }
+            const token = await signToken(user._id);
+            user.token = token;
             result.message = 'Logged in Successfully';
             result.statusCode = 200;
             result.status = 'Success';
@@ -89,7 +94,7 @@ class AuthService {
 
     async findUser(id) {
         const user = await this.Users.findOne({
-            id: id,
+            _id: id,
         }).lean();
         if (!user) return 'User not found!';
         return user;

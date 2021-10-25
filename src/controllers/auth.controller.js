@@ -19,6 +19,12 @@ class AuthController {
     async login(req, res, next) {
         try {
             const result = await authService.login(req.body);
+            if (result.user) {
+                res.cookie('Token', result.user.token, {
+                    httpOnly: true,
+                    maxAge: 3600000,
+                });
+            }
             return res.status(result.statusCode).send({
                 status: result.status,
                 message: result.message,

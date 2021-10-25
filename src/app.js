@@ -4,17 +4,21 @@ const dataBaseConnection = require('./db/db.mongoDB');
 const router = require('./routes/router');
 const hbs = require('express-handlebars');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 dataBaseConnection();
 
 // BodyPerser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Views
-app.use(express.static(__dirname + '/views/static'));
-app.set('views', path.join(__dirname, 'views/partials'));
+app.use('handlebars', hbs());
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views/partials'));
+app.use(express.static(path.join(__dirname, '/public/static')));
+app.use(express.static(__dirname + '/views/static'));
 app.engine(
     'hbs',
     hbs({
